@@ -7,7 +7,6 @@ No servers. No Step Functions costs. Just DynamoDB + SQS + Lambda — and hard d
 [![PyPI](https://img.shields.io/pypi/v/fluxio)](https://pypi.org/project/fluxio/)
 [![Python](https://img.shields.io/badge/python-3.10+-blue)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests](https://github.com/AdityaAudi/fluxio/actions/workflows/test.yml/badge.svg)](https://github.com/AdityaAudi/fluxio/actions)
 
 ---
 
