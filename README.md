@@ -177,38 +177,6 @@ For 1M workflow executions/day with a 6-step workflow:
 
 ---
 
-## Architecture
-
-```
-Your app                        Lambda workers (N concurrent)
-   │                                    │
-   │  start_workflow()                  │  SQS trigger (batch_size=1)
-   ▼                                    ▼
-FluxioEngine ──► SQS FIFO Queue ──► fluxio/worker.py
-   │                                    │
-   ▼                                    ▼
-DynamoDB                          engine.execute_step()
-fluxio_workflows                        │
-  PK: wf-{id}                           ├── claim_step() [conditional write]
-  SK: META                              ├── resolve_inputs()
-  SK: STEP#{name}                       ├── call user @step method
-  SK: BARRIER#{name}                    ├── complete_step()
-                                        ├── arrive_at_barrier() [if fan-in dep]
-                                        └── dispatch_step() [for next ready steps]
-```
-
----
-
-## Install
-
-```bash
-pip install fluxio
-```
-
-Requirements: Python 3.10+, boto3, AWS credentials with DynamoDB + SQS access.
-
----
-
 ## How fluxio compares to Lambda Durable Functions
 
 AWS Lambda Durable Functions (launched December 2025 at re:Invent) implements the same checkpoint-and-replay pattern as fluxio. If you're on a supported region and runtime, it's a solid AWS-native choice.
@@ -219,13 +187,6 @@ fluxio fills the gaps:
 - **Python version** — Lambda Durable Functions requires Python 3.13 or 3.14. fluxio supports Python 3.10, 3.11, 3.12, and 3.13.
 - **Bring your own infrastructure** — fluxio runs on DynamoDB and SQS resources you already provision, audit, and own. No new managed service in your blast radius.
 - **Inspectable state** — because fluxio's state lives in your own DynamoDB table, you can query, debug, and replay workflow state with standard AWS tooling, no SDK required.
-
----
-
-## Related
-
-- [sqs-router](https://github.com/AdityaAudi/sqs-router) — Decorator-based SQS message routing for Lambda
-- [event-pipeline-monitor](https://github.com/AdityaAudi/event-pipeline-monitor) — Real-time SQS/Lambda observability dashboard
 
 ---
 
