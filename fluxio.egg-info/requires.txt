@@ -1,0 +1,8 @@
+boto3>=1.34.0
+
+[dev]
+pytest
+pytest-mock
+ruff
+black
+moto[dynamodb,sqs]>=5.0
